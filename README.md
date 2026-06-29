@@ -21,8 +21,10 @@ off, I push back in the audit doc instead of dressing it up.
   code under `task3_eval_expansion/`; offline demo at `python -m task3_eval_expansion.demo`
   or `make demo-task3`. Pushes back on the brief's single 90% target in favour of
   a 3-tier staged commit defended on refusal-aware deflection.
-- **Task 4.** Planned but not yet started. It lands in a follow-up commit and
-  tag (`v0.4.0-task4`) so a reviewer can read it in isolation.
+- **Task 4 — Architecture decision.** Complete. Prose at
+  [`task4_architecture/04_TASK4_ARCHITECTURE.md`](task4_architecture/04_TASK4_ARCHITECTURE.md).
+  Document-only (no new code under `task4_architecture/`); the primitives the
+  middleware would build with already live in Tasks 1–3.
 
 ## Repo layout
 
@@ -56,14 +58,16 @@ gigs-submission/
 │   ├── go_live_checklist.py       # 6-gate readiness checker
 │   ├── demo.py                    # 3-block rich demo
 │   └── tests/                     # 215 pytest cases
-└── task3_eval_expansion/
-    ├── 03_TASK3_EVAL.md           # the Task 3 strategy prose
-    ├── expansion_track.py         # 6 typed track verdicts (Track 3 split 3a/3b)
-    ├── gap_decomposition.py       # 4-bucket partition of the 20% gap
-    ├── lever_simulator.py         # 5 levers, pure-function trajectory sim
-    ├── q3_commit.py               # staged 3-tier Q3 commit + explicit non-commits
-    ├── demo.py                    # 4-block rich demo
-    └── tests/                     # 142 pytest cases
+├── task3_eval_expansion/
+│   ├── 03_TASK3_EVAL.md           # the Task 3 strategy prose
+│   ├── expansion_track.py         # 6 typed track verdicts (Track 3 split 3a/3b)
+│   ├── gap_decomposition.py       # 4-bucket partition of the 20% gap
+│   ├── lever_simulator.py         # 5 levers, pure-function trajectory sim
+│   ├── q3_commit.py               # staged 3-tier Q3 commit + explicit non-commits
+│   ├── demo.py                    # 4-block rich demo
+│   └── tests/                     # 142 pytest cases
+└── task4_architecture/
+    └── 04_TASK4_ARCHITECTURE.md   # the Task 4 architecture-decision prose
 ```
 
 ## How to run
@@ -113,5 +117,3 @@ A few things I want a reviewer to know up front:
   shipped oracle)
 - `python -m task3_eval_expansion.demo` prints expansion verdicts, the 4-bucket
   gap decomposition, the 80→96% lever trajectory, and the staged Q3 commit
-
-Task 4 will arrive in a follow-up commit.
