@@ -193,7 +193,7 @@ def _claim_supported_by_facts(claim: str, api_facts: dict[str, Any]) -> tuple[st
         if value is None:
             continue
         # Stringify primitives, leave complex out (caller flattens).
-        if isinstance(value, (str, int, float, bool)):
+        if isinstance(value, str | int | float | bool):
             sval = str(value).lower()
             if len(sval) < 2:
                 continue
