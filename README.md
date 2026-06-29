@@ -12,9 +12,9 @@ off, I push back in the audit doc instead of dressing it up.
 - **Task 1 — Agentic support layer audit.** Complete. Prose at
   [`task1_audit/01_TASK1_AUDIT.md`](task1_audit/01_TASK1_AUDIT.md); code under
   `task1_audit/`; offline demo at `python -m task1_audit.demo` or `make demo`.
-- **Tasks 2-4.** Planned but not yet started — see
-  [`/mnt/results/execution_trace/PLAN.md`](https://example.invalid/) for the
-  overall plan (kept in my working notes; not part of this repo's surface).
+- **Tasks 2-4.** Planned but not yet started. They land in follow-up commits and
+  follow-up tags (`v0.2.0-task2`, etc.) so a reviewer can read each task in
+  isolation.
 
 ## Repo layout
 
