@@ -12,8 +12,12 @@ off, I push back in the audit doc instead of dressing it up.
 - **Task 1 — Agentic support layer audit.** Complete. Prose at
   [`task1_audit/01_TASK1_AUDIT.md`](task1_audit/01_TASK1_AUDIT.md); code under
   `task1_audit/`; offline demo at `python -m task1_audit.demo` or `make demo`.
-- **Tasks 2-4.** Planned but not yet started. They land in follow-up commits and
-  follow-up tags (`v0.2.0-task2`, etc.) so a reviewer can read each task in
+- **Task 2 — CashCard launch readiness.** Complete. Prose at
+  [`task2_cashcard/02_TASK2_CASHCARD.md`](task2_cashcard/02_TASK2_CASHCARD.md);
+  code under `task2_cashcard/`; offline demo at `python -m task2_cashcard.demo`
+  or `make demo-task2`.
+- **Tasks 3-4.** Planned but not yet started. They land in follow-up commits
+  and follow-up tags (`v0.3.0-task3`, etc.) so a reviewer can read each task in
   isolation.
 
 ## Repo layout
@@ -26,14 +30,28 @@ gigs-submission/
 ├── .github/workflows/ci.yml       # CI: lint + mypy + pytest + demo
 ├── research/
 │   └── 00_gigs_facts.md           # fact pack with citations to Gigs docs
-└── task1_audit/
-    ├── 01_TASK1_AUDIT.md          # the audit prose
-    ├── escalation_context.py      # human-handoff packet (pydantic)
-    ├── failure_taxonomy.py        # 7-axis classifier for grounded-answer failures
-    ├── grounding_check.py         # offline grounding gate
-    ├── kb_freshness_watcher.py    # Svix-verified webhook -> stale-flag emitter
-    ├── demo.py                    # offline replay of 3 escalations
-    └── tests/                     # 106 deterministic pytest cases
+├── task1_audit/
+│   ├── 01_TASK1_AUDIT.md          # the Task 1 audit prose
+│   ├── escalation_context.py      # human-handoff packet (pydantic)
+│   ├── failure_taxonomy.py        # 7-axis classifier for grounded-answer failures
+│   ├── grounding_check.py         # offline grounding gate
+│   ├── kb_freshness_watcher.py    # Svix-verified webhook -> stale-flag emitter
+│   ├── demo.py                    # offline replay of 3 escalations
+│   └── tests/                     # 138 deterministic pytest cases
+└── task2_cashcard/
+    ├── 02_TASK2_CASHCARD.md       # the Task 2 audit prose
+    ├── cashcard_config.py         # InstanceConfig (pydantic v2, frozen)
+    ├── kb_seed_from_api.py        # pure derivers: plan/porting/eSIM chunks
+    ├── kb_skeleton/               # 21 hand-authored markdown chunks
+    ├── kb_gap_analyzer.py         # gap report vs contact-mix prior
+    ├── escalation_triggers.py     # 7 triggers, first-match-wins
+    ├── week1_canaries.py          # 6 canary checks, post-hoc on agent output
+    ├── eval/
+    │   ├── gold_set.yaml          # 50 questions, distribution matches mix
+    │   └── eval_runner.py         # raw + refusal-aware deflection
+    ├── go_live_checklist.py       # 6-gate readiness checker
+    ├── demo.py                    # 3-block rich demo
+    └── tests/                     # 215 pytest cases
 ```
 
 ## How to run
@@ -74,10 +92,12 @@ A few things I want a reviewer to know up front:
 
 ## Reproduction summary
 
-- 106 pytest cases, all green
+- **353 pytest cases**, all green (138 Task 1 + 215 Task 2)
 - ruff clean (E, F, I, B, UP, SIM, RUF)
-- mypy strict clean
-- `python -m task1_audit.demo` prints the three expected verdicts: ungrounded /
-  grounded / refused
+- mypy strict clean on 16 source files
+- `python -m task1_audit.demo` prints three escalation verdicts
+- `python -m task2_cashcard.demo` prints the launch-readiness scorecard
+  (READY verdict, 50/50 gold-set pass, 100% refusal-aware deflection on the
+  shipped oracle)
 
-Hand-off after Task 1 is complete; Tasks 2-4 will arrive in follow-up commits.
+Tasks 3-4 will arrive in follow-up commits.

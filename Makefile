@@ -1,4 +1,4 @@
-.PHONY: install test lint typecheck demo check clean
+.PHONY: install test lint typecheck demo demo-task2 check clean
 
 PYTHON ?= python
 
@@ -12,11 +12,15 @@ lint:
 	ruff check .
 
 typecheck:
-	mypy task1_audit
+	mypy --strict task1_audit task2_cashcard
 
 # Task 1 demo: runs grounding_check on three example tuples and prints verdicts
 demo:
 	$(PYTHON) -m task1_audit.demo
+
+# Task 2 demo: rich readiness + scorecard + KB-coverage tables
+demo-task2:
+	$(PYTHON) -m task2_cashcard.demo
 
 check: lint typecheck test
 

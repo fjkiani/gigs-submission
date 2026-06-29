@@ -1,0 +1,621 @@
+# CashCard go-live gold set
+#
+# 50 questions, distributed against the contact-mix prior:
+#   esim_activation: 18 (36%)
+#   plan_questions:  12 (24%)
+#   devices:          8 (16%)
+#   roaming:          5 (10%)
+#   port_in:          5 (10%)
+#   other:            2 ( 4%)
+#
+# Each entry:
+#   id:                       stable identifier (used in score reports)
+#   bucket:                   contact-mix bucket
+#   question:                 what the user types
+#   expected_intent:          what the intent classifier should emit
+#   expected_handoff_reason:  null if the agent should answer; one of HandoffReason
+#                             from task1_audit if it should hand off
+#   expected_grounding:       grounded / refused (the only acceptable verdicts)
+#   api_facts:                flat dict of API-derived facts the runtime
+#                             would lookup; eval runner feeds these to
+#                             check_grounding as `api_facts`
+#   golden_answer_keywords:   keywords/phrases that any acceptable answer must
+#                             include. Empty list means refusal is the
+#                             expected behaviour (no answer content to score).
+
+questions:
+- id: esim_001
+  bucket: esim_activation
+  question: How do I install my CashCard eSIM on my new iPhone 15?
+  expected_intent: how_to_install
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - iphone
+  - install
+  - esim
+  retrieved_chunk_ids:
+  - esim.install.ios.first_time
+- id: esim_002
+  bucket: esim_activation
+  question: My eSIM is downloading but Settings says no service. What now?
+  expected_intent: troubleshoot_no_signal
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    eSimProfile.status: installed
+    subscription.status: active
+  golden_answer_keywords:
+  - install
+  - carrier
+  retrieved_chunk_ids:
+  - esim.troubleshooting.no_signal
+- id: esim_003
+  bucket: esim_activation
+  question: I have an old iPhone 7 — can I use CashCard?
+  expected_intent: refuse_unsupported_device
+  expected_handoff_reason: null
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - esim.refusal.unsupported_device
+- id: esim_004
+  bucket: esim_activation
+  question: I want to transfer my CashCard line to a new phone.
+  expected_intent: transfer_esim
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - esim.transfer.between_devices
+- id: esim_005
+  bucket: esim_activation
+  question: How do I install the eSIM on my Pixel 7?
+  expected_intent: how_to_install
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - pixel
+  - qr
+  retrieved_chunk_ids:
+  - esim.install.android.first_time
+- id: esim_006
+  bucket: esim_activation
+  question: How do I install the eSIM on my Galaxy S22?
+  expected_intent: how_to_install
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - samsung
+  - sim manager
+  retrieved_chunk_ids:
+  - esim.install.android.first_time
+- id: esim_007
+  bucket: esim_activation
+  question: Is my eSIM active on my phone?
+  expected_intent: confirm_activation
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    eSimProfile.status: installed
+  golden_answer_keywords:
+  - installed
+  retrieved_chunk_ids:
+  - esim.install.ios.first_time
+- id: esim_008
+  bucket: esim_activation
+  question: My eSIM hasn't installed yet. How long does it take?
+  expected_intent: troubleshoot_no_signal
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    eSimProfile.status: downloading
+  golden_answer_keywords:
+  - downloading
+  retrieved_chunk_ids:
+  - esim.install.ios.first_time
+- id: esim_009
+  bucket: esim_activation
+  question: Where do I find the QR code to install the eSIM?
+  expected_intent: how_to_install
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - qr
+  - app
+  retrieved_chunk_ids:
+  - esim.install.android.first_time
+- id: esim_010
+  bucket: esim_activation
+  question: I have a carrier-locked iPhone from Verizon. Can I use it?
+  expected_intent: refuse_unsupported_device
+  expected_handoff_reason: null
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - esim.refusal.unsupported_device
+- id: esim_011
+  bucket: esim_activation
+  question: I deleted the activation email. Can I get a new code?
+  expected_intent: resend_activation
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - esim.install.ios.first_time
+- id: esim_012
+  bucket: esim_activation
+  question: My subscription is restricted but I'm trying to install. What gives?
+  expected_intent: explain_restriction
+  expected_handoff_reason: POLICY_REFUSAL
+  expected_grounding: refused
+  api_facts:
+    subscription.status: restricted
+    subscription.restriction_reason: payment_overdue
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - other.subscription.restricted
+- id: esim_013
+  bucket: esim_activation
+  question: Does CashCard work on iPad?
+  expected_intent: list_supported_devices
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - ipad
+  - cellular
+  retrieved_chunk_ids:
+  - device.support.list
+- id: esim_014
+  bucket: esim_activation
+  question: Can I scan the QR code from the screen of the same phone I want to install on?
+  expected_intent: how_to_install
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - second device
+  retrieved_chunk_ids:
+  - esim.install.android.first_time
+- id: esim_015
+  bucket: esim_activation
+  question: My eSIM downloaded but no signal — could it be a restriction?
+  expected_intent: troubleshoot_no_signal
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    eSimProfile.status: installed
+    subscription.status: active
+  golden_answer_keywords:
+  - airplane
+  - wait
+  retrieved_chunk_ids:
+  - esim.troubleshooting.no_signal
+- id: esim_016
+  bucket: esim_activation
+  question: Will my CashCard line still work if I get a new SIM card from another carrier?
+  expected_intent: explain_multi_sim
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - esim
+  - line
+  retrieved_chunk_ids:
+  - esim.transfer.between_devices
+- id: esim_017
+  bucket: esim_activation
+  question: I'm getting "Could not activate cellular" on iOS. What now?
+  expected_intent: troubleshoot_no_signal
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - wait
+  retrieved_chunk_ids:
+  - esim.troubleshooting.no_signal
+- id: esim_018
+  bucket: esim_activation
+  question: I need a physical SIM, not an eSIM. Can you send one?
+  expected_intent: refuse_physical_sim
+  expected_handoff_reason: null
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - device.support.list
+- id: plan_001
+  bucket: plan_questions
+  question: How much data have I used this month?
+  expected_intent: report_usage
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    usage.data_mb_used: 4200
+    usage.usage_updated_at_minutes_ago: 12
+  golden_answer_keywords:
+  - as of
+  - gb
+  retrieved_chunk_ids:
+  - plan.usage.data_freshness
+- id: plan_002
+  bucket: plan_questions
+  question: How much data have I used? (carrier hasn't reported in 2 hours)
+  expected_intent: report_usage
+  expected_handoff_reason: TOOL_FAILURE
+  expected_grounding: refused
+  api_facts:
+    usage.usage_updated_at_minutes_ago: 125
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - plan.usage.data_freshness
+- id: plan_003
+  bucket: plan_questions
+  question: What does my plan include?
+  expected_intent: explain_plans
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    plan.name: CashCard Core
+    plan.data_mb: 5120
+    plan.voice_minutes: 1000
+    plan.sms_count: 1000
+  golden_answer_keywords:
+  - plan
+  retrieved_chunk_ids:
+  - plan.overview.how_plans_work
+- id: plan_004
+  bucket: plan_questions
+  question: I want to switch to a bigger plan.
+  expected_intent: change_plan
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - plan.change.during_cycle
+- id: plan_005
+  bucket: plan_questions
+  question: I want to downgrade my plan to save money.
+  expected_intent: change_plan
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - plan.change.during_cycle
+- id: plan_006
+  bucket: plan_questions
+  question: When does my plan renew?
+  expected_intent: explain_plans
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    subscription.next_renewal_date: '2026-07-15'
+  golden_answer_keywords:
+  - renew
+  - cycle
+  retrieved_chunk_ids:
+  - plan.overview.how_plans_work
+- id: plan_007
+  bucket: plan_questions
+  question: My payment didn't go through — what happens now?
+  expected_intent: explain_payment_failure
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts:
+    invoice.status: finalized
+    invoice.amount_due_cents: 2999
+    invoice.paid_at: null
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - plan.billing.payment_failed
+- id: plan_008
+  bucket: plan_questions
+  question: Can I get a refund for an unused month?
+  expected_intent: request_refund
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - plan.change.during_cycle
+- id: plan_009
+  bucket: plan_questions
+  question: How many minutes do I have left this month?
+  expected_intent: report_usage
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    usage.voice_minutes_used: 320
+    plan.voice_minutes: 1000
+    usage.usage_updated_at_minutes_ago: 8
+  golden_answer_keywords:
+  - as of
+  - minutes
+  retrieved_chunk_ids:
+  - plan.usage.data_freshness
+- id: plan_010
+  bucket: plan_questions
+  question: Do you offer a family plan?
+  expected_intent: explain_plans
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - plan
+  retrieved_chunk_ids:
+  - plan.overview.how_plans_work
+- id: plan_011
+  bucket: plan_questions
+  question: Will running out of data slow me down?
+  expected_intent: explain_plans
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - allowance
+  - carrier
+  retrieved_chunk_ids:
+  - plan.overview.how_plans_work
+- id: plan_012
+  bucket: plan_questions
+  question: Why is my plan more expensive than what's listed on the website?
+  expected_intent: explain_plans
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    plan.price_cents: 3999
+    plan.currency: USD
+  golden_answer_keywords:
+  - plan
+  retrieved_chunk_ids:
+  - plan.overview.how_plans_work
+- id: dev_001
+  bucket: devices
+  question: Does CashCard support Pixel 6a?
+  expected_intent: list_supported_devices
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - pixel
+  - supported
+  retrieved_chunk_ids:
+  - device.support.list
+- id: dev_002
+  bucket: devices
+  question: My phone was lost. What do I do?
+  expected_intent: report_lost_device
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - device.lost_or_stolen.policy
+- id: dev_003
+  bucket: devices
+  question: My CashCard line stopped working — used to be fine.
+  expected_intent: troubleshoot_device
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    subscription.status: active
+    eSimProfile.status: installed
+  golden_answer_keywords:
+  - airplane
+  - carrier
+  retrieved_chunk_ids:
+  - device.troubleshooting.basics
+- id: dev_004
+  bucket: devices
+  question: My phone was stolen overnight. What now?
+  expected_intent: report_lost_device
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - device.lost_or_stolen.policy
+- id: dev_005
+  bucket: devices
+  question: Will an unlocked iPhone 14 from Best Buy work?
+  expected_intent: list_supported_devices
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - iphone
+  - supported
+  retrieved_chunk_ids:
+  - device.support.list
+- id: dev_006
+  bucket: devices
+  question: I keep getting dropped calls. Help?
+  expected_intent: troubleshoot_device
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    subscription.status: active
+  golden_answer_keywords:
+  - subscription
+  - carrier
+  retrieved_chunk_ids:
+  - device.troubleshooting.basics
+- id: dev_007
+  bucket: devices
+  question: My APN settings look weird. Should I reset them?
+  expected_intent: troubleshoot_device
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - apn
+  - reset
+  retrieved_chunk_ids:
+  - device.troubleshooting.basics
+- id: dev_008
+  bucket: devices
+  question: I bought a phone from Aliexpress and it has eSIM hardware but I'm not sure it works in the US.
+  expected_intent: list_supported_devices
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - supported
+  - check
+  retrieved_chunk_ids:
+  - device.support.list
+- id: roam_001
+  bucket: roaming
+  question: I'm flying to Paris next week. Will my CashCard work?
+  expected_intent: explain_roaming
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    plan.coverage:
+    - US
+  golden_answer_keywords:
+  - us
+  - roaming
+  retrieved_chunk_ids:
+  - roaming.policy.overview
+- id: roam_002
+  bucket: roaming
+  question: I'm in Mexico City right now and have no signal!
+  expected_intent: troubleshoot_no_service_abroad
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts:
+    plan.coverage:
+    - US
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - roaming.no_service.abroad
+- id: roam_003
+  bucket: roaming
+  question: Can I just buy a data pack for my trip to London?
+  expected_intent: roaming_data_only
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - roaming.data_only.abroad
+- id: roam_004
+  bucket: roaming
+  question: Will I be charged per MB if I forget to buy a pass before flying?
+  expected_intent: explain_roaming
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    plan.coverage:
+    - US
+  golden_answer_keywords:
+  - us
+  - pass
+  retrieved_chunk_ids:
+  - roaming.policy.overview
+- id: roam_005
+  bucket: roaming
+  question: I bought a Europe pass but Switzerland isn't working.
+  expected_intent: troubleshoot_no_service_abroad
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - roaming.no_service.abroad
+- id: port_001
+  bucket: port_in
+  question: What do I need to port my number from Verizon?
+  expected_intent: explain_porting
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - account number
+  - pin
+  - ssn
+  - zip
+  retrieved_chunk_ids:
+  - porting.us.basics
+- id: port_002
+  bucket: port_in
+  question: My port was declined — got "portingPinIncorrect". What now?
+  expected_intent: explain_decline
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    porting.declineCode: portingPinIncorrect
+  golden_answer_keywords:
+  - pin
+  - donor
+  retrieved_chunk_ids:
+  - porting.us.decline_codes_overview
+- id: port_003
+  bucket: port_in
+  question: I changed my mind — cancel my port.
+  expected_intent: cancel_port
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts: {}
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - porting.us.cancellation
+- id: port_004
+  bucket: port_in
+  question: Why was my port declined?
+  expected_intent: explain_decline
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts:
+    porting.declineCode: portingAccountNumberMismatch
+  golden_answer_keywords:
+  - account number
+  retrieved_chunk_ids:
+  - porting.us.decline_codes_overview
+- id: port_005
+  bucket: port_in
+  question: How long does porting usually take?
+  expected_intent: explain_porting
+  expected_handoff_reason: null
+  expected_grounding: grounded
+  api_facts: {}
+  golden_answer_keywords:
+  - hours
+  retrieved_chunk_ids:
+  - porting.us.basics
+- id: oth_001
+  bucket: other
+  question: Why is my subscription restricted?
+  expected_intent: explain_restriction
+  expected_handoff_reason: POLICY_REFUSAL
+  expected_grounding: refused
+  api_facts:
+    subscription.status: restricted
+    subscription.restriction_reason: payment_overdue
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - other.subscription.restricted
+- id: oth_002
+  bucket: other
+  question: Someone reset my password 10 minutes ago and now wants to change my email.
+  expected_intent: handle_security_signal
+  expected_handoff_reason: WRITE_REQUIRES_HUMAN
+  expected_grounding: refused
+  api_facts:
+    recent_events:
+    - password_reset
+  golden_answer_keywords: []
+  retrieved_chunk_ids:
+  - other.security.account_takeover_signals
