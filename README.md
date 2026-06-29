@@ -16,9 +16,13 @@ off, I push back in the audit doc instead of dressing it up.
   [`task2_cashcard/02_TASK2_CASHCARD.md`](task2_cashcard/02_TASK2_CASHCARD.md);
   code under `task2_cashcard/`; offline demo at `python -m task2_cashcard.demo`
   or `make demo-task2`.
-- **Tasks 3-4.** Planned but not yet started. They land in follow-up commits
-  and follow-up tags (`v0.3.0-task3`, etc.) so a reviewer can read each task in
-  isolation.
+- **Task 3 — Evaluation and expansion strategy.** Complete. Prose at
+  [`task3_eval_expansion/03_TASK3_EVAL.md`](task3_eval_expansion/03_TASK3_EVAL.md);
+  code under `task3_eval_expansion/`; offline demo at `python -m task3_eval_expansion.demo`
+  or `make demo-task3`. Pushes back on the brief's single 90% target in favour of
+  a 3-tier staged commit defended on refusal-aware deflection.
+- **Task 4.** Planned but not yet started. It lands in a follow-up commit and
+  tag (`v0.4.0-task4`) so a reviewer can read it in isolation.
 
 ## Repo layout
 
@@ -38,20 +42,28 @@ gigs-submission/
 │   ├── kb_freshness_watcher.py    # Svix-verified webhook -> stale-flag emitter
 │   ├── demo.py                    # offline replay of 3 escalations
 │   └── tests/                     # 138 deterministic pytest cases
-└── task2_cashcard/
-    ├── 02_TASK2_CASHCARD.md       # the Task 2 audit prose
-    ├── cashcard_config.py         # InstanceConfig (pydantic v2, frozen)
-    ├── kb_seed_from_api.py        # pure derivers: plan/porting/eSIM chunks
-    ├── kb_skeleton/               # 21 hand-authored markdown chunks
-    ├── kb_gap_analyzer.py         # gap report vs contact-mix prior
-    ├── escalation_triggers.py     # 7 triggers, first-match-wins
-    ├── week1_canaries.py          # 6 canary checks, post-hoc on agent output
-    ├── eval/
-    │   ├── gold_set.yaml          # 50 questions, distribution matches mix
-    │   └── eval_runner.py         # raw + refusal-aware deflection
-    ├── go_live_checklist.py       # 6-gate readiness checker
-    ├── demo.py                    # 3-block rich demo
-    └── tests/                     # 215 pytest cases
+├── task2_cashcard/
+│   ├── 02_TASK2_CASHCARD.md       # the Task 2 audit prose
+│   ├── cashcard_config.py         # InstanceConfig (pydantic v2, frozen)
+│   ├── kb_seed_from_api.py        # pure derivers: plan/porting/eSIM chunks
+│   ├── kb_skeleton/               # 21 hand-authored markdown chunks
+│   ├── kb_gap_analyzer.py         # gap report vs contact-mix prior
+│   ├── escalation_triggers.py     # 7 triggers, first-match-wins
+│   ├── week1_canaries.py          # 6 canary checks, post-hoc on agent output
+│   ├── eval/
+│   │   ├── gold_set.yaml          # 50 questions, distribution matches mix
+│   │   └── eval_runner.py         # raw + refusal-aware deflection
+│   ├── go_live_checklist.py       # 6-gate readiness checker
+│   ├── demo.py                    # 3-block rich demo
+│   └── tests/                     # 215 pytest cases
+└── task3_eval_expansion/
+    ├── 03_TASK3_EVAL.md           # the Task 3 strategy prose
+    ├── expansion_track.py         # 6 typed track verdicts (Track 3 split 3a/3b)
+    ├── gap_decomposition.py       # 4-bucket partition of the 20% gap
+    ├── lever_simulator.py         # 5 levers, pure-function trajectory sim
+    ├── q3_commit.py               # staged 3-tier Q3 commit + explicit non-commits
+    ├── demo.py                    # 4-block rich demo
+    └── tests/                     # 142 pytest cases
 ```
 
 ## How to run
@@ -92,12 +104,14 @@ A few things I want a reviewer to know up front:
 
 ## Reproduction summary
 
-- **353 pytest cases**, all green (138 Task 1 + 215 Task 2)
+- **495 pytest cases**, all green (138 Task 1 + 215 Task 2 + 142 Task 3)
 - ruff clean (E, F, I, B, UP, SIM, RUF)
-- mypy strict clean on 16 source files
+- mypy strict clean across all three task packages
 - `python -m task1_audit.demo` prints three escalation verdicts
 - `python -m task2_cashcard.demo` prints the launch-readiness scorecard
   (READY verdict, 50/50 gold-set pass, 100% refusal-aware deflection on the
   shipped oracle)
+- `python -m task3_eval_expansion.demo` prints expansion verdicts, the 4-bucket
+  gap decomposition, the 80→96% lever trajectory, and the staged Q3 commit
 
-Tasks 3-4 will arrive in follow-up commits.
+Task 4 will arrive in a follow-up commit.

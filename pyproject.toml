@@ -31,7 +31,7 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["task1_audit", "task2_cashcard"]
+packages = ["task1_audit", "task2_cashcard", "task3_eval_expansion"]
 
 [tool.ruff]
 line-length = 100
@@ -43,6 +43,8 @@ ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]
 "task1_audit/tests/*" = ["B"]
+"task2_cashcard/tests/*" = ["B"]
+"task3_eval_expansion/tests/*" = ["B"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -53,7 +55,7 @@ warn_return_any = true
 exclude = '/tests/'
 
 [tool.pytest.ini_options]
-testpaths = ["task1_audit/tests", "task2_cashcard/tests"]
+testpaths = ["task1_audit/tests", "task2_cashcard/tests", "task3_eval_expansion/tests"]
 addopts = "-ra --strict-markers --strict-config"
 filterwarnings = [
     "error",
